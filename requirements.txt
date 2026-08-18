@@ -1,0 +1,4 @@
+# Pinned to 1.61.1, not 1.38.0 — src/app.py uses st.badge(), added in 1.44.0.
+streamlit==1.61.1
+pandas==2.2.2
+anthropic==0.34.2

@@ -1,0 +1,8 @@
+staff_id,name,role,department,weekly_cap_hours,sick_balance_hours,unavailable_days,Mon,Tue,Wed,Thu,Fri,Sat,Sun
+S001,Alice Ramirez,Front Desk Agent,Front Desk,40,24,,M,M,OFF,M,M,OFF,OFF
+S002,Ben Okafor,Front Desk Agent,Front Desk,40,16,Sun,OFF,M,M,OFF,M,M,OFF
+S003,Carla Nguyen,Housekeeping Attendant,Housekeeping,32,8,,A,A,OFF,A,OFF,A,A
+S004,David Silva,Housekeeping Attendant,Housekeeping,40,0,Sat,M,OFF,M,M,M,OFF,OFF
+S005,Elena Petrova,Server,F&B,40,20,,E,E,E,OFF,OFF,E,E
+S006,Farid Haidari,Line Cook,F&B,40,32,Wed,OFF,M,OFF,M,M,OFF,M
+S007,Grace Lin,Concierge,Concierge,24,12,"Sat,Sun",M,OFF,M,OFF,M,OFF,OFF
