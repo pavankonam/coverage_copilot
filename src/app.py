@@ -31,7 +31,22 @@ Implements Screens A, B, C, and D from coverage-copilot-prd.md Section 7:
 from __future__ import annotations
 
 import dataclasses
+import sys
 from pathlib import Path
+
+# Locally we've always launched via `python3 -m streamlit run src/app.py`,
+# and the `-m` flag makes Python add the launch directory (the repo root)
+# to sys.path — that's what lets `from src.xxx import ...` below resolve.
+# Streamlit Community Cloud instead runs the installed `streamlit` console
+# script directly (not `python -m streamlit`), which only puts this file's
+# own directory (src/) on sys.path, not its parent — so `src` is never
+# importable as a package there, and the same import raises
+# ModuleNotFoundError: No module named 'src'. Insert the repo root
+# explicitly so these imports resolve the same way regardless of how the
+# script is launched.
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
 import streamlit as st
 
