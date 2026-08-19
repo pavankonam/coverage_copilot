@@ -36,6 +36,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from src.classification import Candidate, classify_absence
@@ -48,6 +49,17 @@ from src.coverage_brief import (
 from src.data_layer import DAY_COLUMNS, load_and_validate_roster
 
 app = FastAPI(title="Coverage Copilot API")
+
+# Wide open: v1 has no auth/session/cookies at all (PRD Section 3), so
+# there's nothing origin-based restriction would actually protect here,
+# and the frontend's origin isn't fixed yet (local dev now, a deployed
+# origin later). Revisit if that changes.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- In-memory state ------------------------------------------------------
 # No persistent DB (PRD Section 3 non-goal) -- one roster, one effective

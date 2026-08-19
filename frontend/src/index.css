@@ -1,0 +1,38 @@
+:root {
+  color-scheme: light dark;
+  font: 16px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1rem;
+}
+
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.api-base {
+  color: #767676;
+  font-size: 0.85rem;
+}
+
+.notice {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.notice-error {
+  color: #c0392b;
+}
+
+.schedule {
+  background: color-mix(in srgb, currentColor 6%, transparent);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  text-align: left;
+  font-size: 0.85rem;
+}
