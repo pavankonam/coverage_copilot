@@ -2,3 +2,6 @@ pandas==2.2.2
 anthropic==0.34.2
 fastapi==0.141.1
 uvicorn==0.52.4
+# Required at runtime by POST /roster's UploadFile/File(...) -- FastAPI
+# won't even register that route without it.
+python-multipart==0.0.32
