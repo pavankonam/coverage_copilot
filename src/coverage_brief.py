@@ -11,8 +11,8 @@ Implements coverage-copilot-prd.md Section 8 exactly:
   recommend a cross-department fit when same-department options are weak.
 - The model ranks candidates and explains trade-offs/overtime risk. It
   never claims to authorize or assign anyone — output is JSON only.
-- The API key is read from st.secrets["ANTHROPIC_API_KEY"] or the
-  ANTHROPIC_API_KEY environment variable. Never hardcoded.
+- The API key is read from the ANTHROPIC_API_KEY environment variable.
+  Never hardcoded.
 - API failures (missing key, network, malformed response) never crash the
   caller — they raise CoverageBriefError, which a UI layer can catch to
   offer a retry action.
@@ -95,20 +95,10 @@ class BriefCandidate:
 
 
 def _get_api_key() -> str | None:
-    """Resolve the Anthropic API key from st.secrets, then the env var.
+    """Resolve the Anthropic API key from the ANTHROPIC_API_KEY env var.
 
-    Never hardcoded. Streamlit is optional here — this module works
-    outside a running Streamlit app (e.g. in tests) as long as the env
-    var is set.
+    Never hardcoded.
     """
-    try:
-        import streamlit as st
-
-        key = st.secrets["ANTHROPIC_API_KEY"]
-        if key:
-            return str(key)
-    except Exception:  # noqa: BLE001 - no secrets.toml, no streamlit, key absent, etc.
-        pass
     return os.environ.get("ANTHROPIC_API_KEY")
 
 
@@ -222,8 +212,8 @@ def get_coverage_brief(
         api_key = _get_api_key()
         if not api_key:
             raise CoverageBriefError(
-                "No Anthropic API key found. Set st.secrets['ANTHROPIC_API_KEY'] "
-                "or the ANTHROPIC_API_KEY environment variable."
+                "No Anthropic API key found. Set the ANTHROPIC_API_KEY "
+                "environment variable."
             )
         client = anthropic.Anthropic(api_key=api_key)
 

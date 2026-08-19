@@ -6,12 +6,12 @@ When a hotel employee has a sudden, unplanned absence (sick leave, same-day PTO)
 
 ## 2. Goals (In Scope)
 
-- A single Streamlit app for sudden absence coverage matching.
+- A backend service for sudden absence coverage matching (see Section 9 for the current stack).
 - CSV upload of roster + weekly schedule (no manual data entry screen required for v1).
 - Deterministic auto-resolve for unambiguous, policy-clean matches.
 - Escalation to a human decision for everything else. An AI-drafted brief is used **only** in the genuine multi-candidate trade-off case.
 - A ledger recording every resolution (auto and manual) with its reasoning.
-- Deployable from GitHub to Streamlit Community Cloud.
+- Deployable from GitHub.
 
 ## 3. Non-Goals (Explicitly Out of Scope for v1)
 
@@ -89,9 +89,10 @@ Given an absence event (staff_id, day):
 
 ## 9. Tech Stack & Deployment
 
-- Python, Streamlit, pandas, the official `anthropic` SDK.
-- Repo hosted on GitHub; deployed via Streamlit Community Cloud pointed at that repo.
-- `ANTHROPIC_API_KEY` set as a Streamlit Cloud secret, never committed.
+- Python, FastAPI, pandas, the official `anthropic` SDK. A separate React frontend
+  is planned as a later step; no Streamlit.
+- Repo hosted on GitHub.
+- `ANTHROPIC_API_KEY` set as an environment variable, never committed.
 - Pinned `requirements.txt`. README with local run instructions and deploy steps.
 
 ## 10. Acceptance Test Scenarios (must all pass)
@@ -105,3 +106,29 @@ Given an absence event (staff_id, day):
 ## 11. Reminder for the builder
 
 This is v1 of the sick-leave / sudden-absence coverage module only. Do not generalize to rooms, events, guests, or cross-property logic, even if it looks like natural reuse — that boundary is intentional, not an oversight.
+
+## 12. Extension — REST API surface & effective schedule (post-v1, not in Sections 1–11)
+
+**Sections 1–11 above are not the complete picture.** This section documents functionality added after the original v1 scope was written — a deliberate extension, built out on top of the FastAPI backend described in Section 9, not a restatement of it and not a port of the old Streamlit screens (Section 7). A future session should read this section too, not just Sections 1–11.
+
+### API surface (`src/api.py`)
+
+- **`POST /roster`** — upload a roster CSV, run it through `data_layer.load_and_validate_roster` (unmodified), store the resulting clean roster, and reset both the effective schedule (below) and the event list from it. Returns validation errors or a success/staff-count summary — never silently drops invalid rows, per Section 5.
+- **`POST /absences`** — classify a reported absence via `classification.classify_absence` (unmodified). Every classification, not just multi-mode, is now stored as an event with a generated id, in creation order:
+  - `decision == "auto"` → resolved immediately; the assigned candidate is recorded as `covered_by`, and the effective schedule updates immediately.
+  - `decision == "escalate"` → stored pending. `mode == "multi"` still triggers exactly one `get_coverage_brief()` call (Section 8 is unchanged — still the only code path that reaches the Anthropic API) and returns the ranked candidates in this same response; the event itself stays unresolved until a human resolves it via `POST /events/{id}/assign`.
+- **`GET /events`** — the full event list, oldest first: id, staff_id/day/reason, decision/mode/note, eligible_candidates/clean_matches, resolved/resolution/covered_by, and (multi-mode only) the cached ranked candidates.
+- **`GET /schedule`** — the original uploaded schedule and the current effective schedule, side by side.
+- **`POST /events/{event_id}/assign`** — manually resolve a pending event by assigning a covering staff_id. 404 for an unknown event id, 409 if already resolved, 400 if the event's mode is `"none"` (no eligible candidates exist to assign — consistent with Section 7's "escalate-none shows... no assign action available") or the given staff_id isn't in the roster.
+
+### Effective schedule (new concept)
+
+Separate from the originally-uploaded schedule. Every resolution — auto or manual — updates it: the covering person's day flips from `OFF` to the shift they're now covering (the absent person's originally-scheduled shift that day); the absent person's day flips to `OFF`, **and that day is added to the absent person's `unavailable_days` in the effective schedule** (not the original roster) — see below for why. It is a derived record of who is actually covering what, built from resolutions — but see below, it is not merely informational anymore.
+
+**The effective schedule is the source of truth for classification, not the original upload.** `classify_absence`'s rule tree itself is unchanged (Section 6, still not to be modified) — but `POST /absences` now feeds it the *effective* schedule, not the originally-uploaded one. Concretely: eligibility (`schedule[day] == OFF`) and every candidate's `hours_scheduled`/`would_overtime` reflect anyone already covering another shift, not just what they were originally scheduled for. A person who has already picked up one covering shift on a given day is therefore excluded from being offered again for a different absence that same day — or, if their week is now busier, may instead show up correctly overtime-flagged rather than as a clean match. (`POST /events/{event_id}/assign` does not call `classify_absence` at all — it never did, and still doesn't; it only validates the assigned staff_id exists, now checked against the effective schedule too for consistency, though the two always share the same staff_id membership so this has no observable effect.) `_apply_coverage()`'s own lookup of *which shift is being covered* is unaffected by this and still reads the originally-uploaded schedule — the covering person needs the shift the absent person actually had that day, not whatever the absent person's now-mutated effective cell says.
+
+Uploading a new roster (`POST /roster`) resets the effective schedule to a fresh copy of it, and clears the event list — events and coverage recorded against a previous roster don't carry forward.
+
+**Known, deliberate gap — sick-balance depletion is not tracked.** `sick_balance_hours` is never decremented anywhere in this system: not by `classify_absence` (unmodified, Section 6 has no such rule) and not by this API layer, which never mutates that column. A person's balance is the same static number on every absence they're ever involved in — someone flagged low-balance on their first absence this quarter is flagged identically (not more, not less) on every later one, and someone with a comfortably high balance never gets flagged no matter how many absences accumulate. This is a known gap, not an oversight; fixing it would mean adding a mutation this PRD doesn't yet specify, and is out of scope here.
+
+**Fixed — an absence is no longer indistinguishable from a day off, in the effective schedule.** The schema (Section 5) still only has `OFF` for "not scheduled to work" — there's still no distinct shift-code for "was scheduled, but is out sick," and none was added. Instead, `_apply_coverage()` now also writes the resolved day into the absent person's `unavailable_days` cell in the effective schedule (parsed/joined the same comma-separated way Section 5 already specifies for that column). `classify_absence`'s existing, unmodified eligibility check already excludes any candidate with `day in unavailable_days` (Section 6) — so an absent person's `OFF` cell alone no longer makes them look available to cover someone else the same day; the `unavailable_days` entry is what actually excludes them. This was previously an open gap (see prior revisions of this section); it's closed as of this change, at the effective-schedule-data level only — `classification.py` and the CSV schema are both untouched.

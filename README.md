@@ -3,7 +3,9 @@
 Sudden-absence coverage matching for a single hotel department manager. See
 [`coverage-copilot-prd.md`](./coverage-copilot-prd.md) for the full product spec.
 
-> **Status:** project scaffolding only. UI and business logic are not yet implemented.
+> **Status:** backend implemented (roster validation, deterministic classification,
+> AI-drafted multi-candidate brief, REST API). No frontend yet — a React frontend is
+> planned as a later step.
 
 ## Local setup
 
@@ -13,19 +15,21 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Copy the secrets template and fill in your own key (never commit the real file):
+Set your Anthropic API key as an environment variable (never commit it):
 
 ```bash
-cp .streamlit/secrets.toml.example .streamlit/secrets.toml
+export ANTHROPIC_API_KEY=sk-ant-your-key-here
 ```
 
-Run the app:
+Run the API:
 
 ```bash
-streamlit run src/app.py
+uvicorn src.api:app --reload
 ```
+
+The API is then available at `http://127.0.0.1:8000` (interactive docs at `/docs`).
 
 ## Deployment
 
-Deployed via [Streamlit Community Cloud](https://streamlit.io/cloud) pointed at this
-GitHub repo, with `ANTHROPIC_API_KEY` set as a Streamlit Cloud secret (never committed).
+Deployed from this GitHub repo, with `ANTHROPIC_API_KEY` set as an environment
+variable on the host (never committed).
