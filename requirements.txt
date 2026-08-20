@@ -1,5 +1,10 @@
+# anthropic>=0.35 required -- 0.34.2 passes a `proxies` kwarg to httpx's
+# Client() that the httpx version resolved here (needed for
+# fastapi.testclient) no longer accepts, so get_coverage_brief() crashed
+# with an unhandled TypeError (a bare 500, not the intended
+# CoverageBriefError -> 502) on every real call. 0.125.0 has none of that.
 pandas==2.2.2
-anthropic==0.34.2
+anthropic==0.125.0
 fastapi==0.141.1
 uvicorn==0.52.4
 # Required at runtime by POST /roster's UploadFile/File(...) -- FastAPI
