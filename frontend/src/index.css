@@ -11,7 +11,8 @@ html {
 body {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: var(--weight-regular);
   line-height: 1.5;
   color: var(--color-text);
   background: var(--color-stone);
@@ -46,14 +47,17 @@ kbd {
 
 .page-heading {
   font-family: var(--font-serif);
-  font-size: 2rem;
-  font-weight: 500;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-medium);
+  line-height: 1.2;
   color: var(--color-text);
-  margin: 0 0 1.5rem;
+  margin: 0 0 var(--space-24);
 }
 
 .notice {
-  padding: 0.75rem 1rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  padding: var(--space-12) var(--space-16);
   border-radius: var(--radius-md);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -67,17 +71,18 @@ kbd {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-16);
   background: var(--color-brass-tint);
   border: 1px solid color-mix(in srgb, var(--color-brass) 40%, transparent);
   border-left: 3px solid var(--color-brass);
   border-radius: var(--radius-md);
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
+  padding: var(--space-12) var(--space-16);
+  margin-bottom: var(--space-20);
   font-family: var(--font-sans);
-  font-size: 0.875rem;
+  font-size: var(--text-md);
   color: var(--color-text);
   max-width: 640px;
+  box-shadow: var(--shadow-subtle);
 }
 
 .banner-dismiss {
@@ -85,10 +90,11 @@ kbd {
   border: none;
   cursor: pointer;
   color: var(--color-text-muted);
-  font-size: 1.125rem;
+  font-size: var(--text-xl);
   line-height: 1;
-  padding: 0 0.125rem;
+  padding: 0 var(--space-4);
   flex-shrink: 0;
+  transition: color var(--transition);
 }
 
 .banner-dismiss:hover {
@@ -97,39 +103,39 @@ kbd {
 
 .staff-name {
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.9375rem;
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-lg);
   color: var(--color-text);
 }
 
 .staff-id {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   color: var(--color-text-muted);
 }
 
 /* --- Buttons -----------------------------------------------------------
-   Shared base + two variants, used by the absence modal, pending-review
-   Assign buttons, and the Upload page's "Go to Schedule" action.
-   Component-specific files may layer a small modifier (e.g. flex-shrink)
-   on top via an additional class. */
+   Shared base + variants, used by the absence modal, pending-review
+   Assign buttons, and Schedule's Replace roster / Go to Schedule
+   actions. Component-specific files may layer a small modifier (e.g.
+   flex-shrink) on top via an additional class. */
 
 .btn {
   font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
   border-radius: var(--radius-sm);
-  padding: 0.5rem 0.875rem;
+  padding: var(--space-8) var(--space-16);
   cursor: pointer;
   white-space: nowrap;
   border: 1px solid transparent;
   display: inline-block;
   text-decoration: none;
   transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition);
 }
 
 .btn:disabled {
@@ -153,7 +159,7 @@ kbd {
   color: var(--color-text-on-ink-muted);
   background: transparent;
   border-color: color-mix(in srgb, white 18%, transparent);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .btn-ghost-on-ink:hover:not(:disabled) {
@@ -167,7 +173,7 @@ kbd {
   color: var(--color-text);
   background: var(--color-surface);
   border-color: var(--color-border);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .btn-ghost:hover:not(:disabled) {
@@ -175,15 +181,26 @@ kbd {
   background: color-mix(in srgb, var(--color-ink) 4%, var(--color-surface));
 }
 
-/* --- Error/danger box on an ink-navy surface ----------------------------
-   Shared by the absence modal and the Upload page's validation errors.
-   Callers add their own margin via a second class. */
+/* --- Error/danger box, two surface variants -----------------------------
+   Shared by the absence modal, Upload's validation errors (-on-ink) and
+   the Pending/multi-candidate cards (-on-light). Callers add their own
+   margin via a second class. */
 .error-box-on-ink {
   font-family: var(--font-sans);
-  font-size: 0.8125rem;
+  font-size: var(--text-base);
   color: var(--color-danger-on-ink);
   background: var(--color-danger-tint);
   border: 1px solid var(--color-danger-border);
   border-radius: var(--radius-sm);
-  padding: 0.5rem 0.75rem;
+  padding: var(--space-8) var(--space-12);
+}
+
+.error-box-on-light {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-danger-on-light);
+  background: var(--color-danger-tint);
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-8) var(--space-12);
 }

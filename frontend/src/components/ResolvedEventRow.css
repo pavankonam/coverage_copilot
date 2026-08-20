@@ -1,24 +1,35 @@
+/* Deliberately one depth below .pending-card: these are settled, not
+   actionable, so they sit quieter -- subtle at rest, lifting only to
+   resting on hover (never all the way to raised, unlike the cards that
+   still need a decision). */
+
 .resolved-row {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: 1rem 1.25rem;
+  padding: var(--space-16) var(--space-20);
+  box-shadow: var(--shadow-subtle);
+  transition: box-shadow var(--transition);
+}
+
+.resolved-row:hover {
+  box-shadow: var(--shadow-resting);
 }
 
 .resolved-row-footer {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
+  gap: var(--space-12);
+  margin-top: var(--space-12);
 }
 
 .resolution-badge {
   font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: 700;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  padding: 0.1875rem 0.5625rem;
+  padding: var(--space-4) var(--space-12);
   border-radius: 999px;
   white-space: nowrap;
 }
@@ -36,6 +47,6 @@
 
 .resolved-covered-by {
   font-family: var(--font-sans);
-  font-size: 0.8125rem;
+  font-size: var(--text-base);
   color: var(--color-text-muted);
 }

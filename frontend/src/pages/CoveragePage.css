@@ -2,6 +2,6 @@
 .resolved-list {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--space-20);
   max-width: 680px;
 }

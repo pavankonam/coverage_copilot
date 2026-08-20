@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../api'
 import AbsenceReportModal from '../components/AbsenceReportModal'
 import DeptTag from '../components/DeptTag'
 import RosterUpload from '../components/RosterUpload'
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '../iconStyle'
 import './SchedulePage.css'
 
 // Mirrors src/data_layer.py's DAY_COLUMNS.
@@ -128,7 +129,7 @@ function SchedulePage() {
           className="btn btn-ghost replace-roster-button"
           onClick={() => setIsReplacingRoster(true)}
         >
-          <RefreshCw size={14} strokeWidth={2} aria-hidden="true" />
+          <RefreshCw size={ICON_SIZE.sm} strokeWidth={ICON_STROKE_WIDTH} aria-hidden="true" />
           Replace roster
         </button>
       )}

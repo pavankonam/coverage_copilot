@@ -42,7 +42,7 @@ function PendingEventCard({ event, assigning, error, onAssign }) {
       {event.mode === 'none' && <NoCandidates />}
 
       {error && (
-        <p className="pending-card-error" role="alert">
+        <p className="error-box-on-light pending-card-error" role="alert">
           {error}
         </p>
       )}
@@ -126,7 +126,9 @@ function RankedCandidates({ event, assigning, onAssign }) {
                 <span className="sr-only">Score {Math.round(candidate.score)} out of 100. </span>
                 {candidate.reasoning}
               </p>
-              {candidate.warning && <p className="ranked-warning">{candidate.warning}</p>}
+              {candidate.warning && (
+                <p className="error-box-on-light ranked-warning">{candidate.warning}</p>
+              )}
             </li>
           )
         })}

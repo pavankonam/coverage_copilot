@@ -1,8 +1,8 @@
 .replace-roster-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.4375rem;
-  margin-bottom: 1.25rem;
+  gap: var(--space-8);
+  margin-bottom: var(--space-20);
 }
 
 .duty-board-wrap {
@@ -10,7 +10,7 @@
   border: 1px solid color-mix(in srgb, var(--color-ink) 16%, var(--color-stone));
   border-radius: var(--radius-md);
   background: var(--color-surface);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-resting);
 }
 
 .duty-board {
@@ -24,13 +24,13 @@
   top: 0;
   background: var(--color-surface);
   font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--color-text-muted);
   text-align: left;
-  padding: 0.75rem 1rem;
+  padding: var(--space-12) var(--space-16);
   border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
 }
@@ -41,7 +41,7 @@
 }
 
 .duty-board tbody tr {
-  transition: background-color 0.1s ease;
+  transition: background-color var(--transition);
 }
 
 .duty-board tbody tr:hover th,
@@ -51,17 +51,17 @@
 
 .duty-board tbody th.staff-col {
   text-align: left;
-  font-weight: normal;
+  font-weight: var(--weight-regular);
   vertical-align: middle;
-  padding: 0.75rem 1rem;
+  padding: var(--space-12) var(--space-16);
   min-width: 220px;
 }
 
 .staff-name-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.1875rem;
+  gap: var(--space-8);
+  margin-bottom: var(--space-4);
 }
 
 .shift-cell {
@@ -80,7 +80,7 @@
   justify-content: center;
   width: 100%;
   box-sizing: border-box;
-  padding: 0.75rem 1rem;
+  padding: var(--space-12) var(--space-16);
 }
 
 .shift-cell-button {
@@ -90,7 +90,7 @@
   font: inherit;
   cursor: pointer;
   border-radius: var(--radius-sm);
-  transition: background-color 0.15s ease;
+  transition: background-color var(--transition);
 }
 
 .shift-cell-button:hover {
@@ -99,13 +99,13 @@
 
 .shift-code {
   font-family: var(--font-mono);
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
   color: var(--color-text);
 }
 
 .shift-code-off {
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   color: var(--color-text-muted);
 }
 
@@ -119,9 +119,11 @@
    padding (padding lives on the inner button/static span instead), so
    a small `right: Xrem` offset sat only a few px from the column
    border -- much closer to the boundary than the shift-code text
-   itself (which has 1rem of padding), making the dot look like it
+   itself (which has real padding), making the dot look like it
    belonged to the neighboring day at a glance. Centering removes that
-   ambiguity regardless of column width. */
+   ambiguity regardless of column width. Kept as a hand-tuned 6px/0.35rem
+   rather than snapped to the spacing scale -- it's a decorative marker,
+   not a content-spacing value. */
 .changed-dot {
   position: absolute;
   top: 0.35rem;

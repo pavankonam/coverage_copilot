@@ -1,6 +1,7 @@
 import { CalendarCheck, CheckCircle2, UploadCloud } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { API_BASE_URL } from '../api'
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '../iconStyle'
 import './RosterUpload.css'
 
 const STEPS = [
@@ -153,7 +154,12 @@ function RosterUpload({ onUploaded, onCancel }) {
               className="sr-only"
               onChange={handleInputChange}
             />
-            <UploadCloud className="dropzone-icon" size={30} strokeWidth={1.5} aria-hidden="true" />
+            <UploadCloud
+              className="dropzone-icon"
+              size={ICON_SIZE.lg}
+              strokeWidth={ICON_STROKE_WIDTH}
+              aria-hidden="true"
+            />
             <span className="dropzone-title">Drag and drop your roster CSV here</span>
             <span className="dropzone-subtitle">or click to browse files</span>
           </label>
@@ -175,7 +181,7 @@ function RosterUpload({ onUploaded, onCancel }) {
         {STEPS.map(({ icon: Icon, title, description }) => (
           <li key={title} className="upload-step">
             <div className="upload-step-icon">
-              <Icon size={18} strokeWidth={1.75} aria-hidden="true" />
+              <Icon size={ICON_SIZE.md} strokeWidth={ICON_STROKE_WIDTH} aria-hidden="true" />
             </div>
             <p className="upload-step-title">{title}</p>
             <p className="upload-step-description">{description}</p>

@@ -49,22 +49,78 @@
   --color-dept-fb: #9c4f26; /* muted rust */
   --color-dept-concierge: #6b3b60; /* plum */
 
-  /* --- Type --- */
+  /* --- Type families --- */
   --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  /* --- Type scale ---
+     Seven deliberate steps, not the browser's default heading
+     relationships -- every font-size in the app resolves to one of
+     these. Paired with four named weights, used consistently by role
+     (e.g. --weight-semibold for anything clickable/emphasized) rather
+     than picked ad hoc per element.
+
+     2xl  32px  page titles (h1)
+     xl   20px  section/card headings inside a surface (modal, upload card)
+     lg   15px  primary body -- names, values, things being scanned
+     md   14px  secondary body -- notes, descriptions, reasoning
+     base 13px  interactive labels -- buttons, tabs
+     sm   12px  meta -- table headers, staff ids, timestamps
+     xs   11px  tags/badges -- the smallest, densest text in the app */
+  --text-2xl: 2rem;
+  --text-xl: 1.25rem;
+  --text-lg: 0.9375rem;
+  --text-md: 0.875rem;
+  --text-base: 0.8125rem;
+  --text-sm: 0.75rem;
+  --text-xs: 0.6875rem;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* --- Spacing --- strict 4px base / 8px rhythm. 4px exists only for
+     the tightest spots (icon-to-label gaps, badge padding); everything
+     structural (card padding, stacked gaps, margins) uses an 8px
+     multiple. */
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-20: 1.25rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-40: 2.5rem;
+  --space-48: 3rem;
 
   /* --- Layout --- */
   --sidebar-width: 250px;
   --radius-sm: 4px;
   --radius-md: 8px;
 
-  /* --- Shadow --- soft, ink-tinted rather than flat black, so cards
-     read as lifted surfaces without looking harsh against the warm
-     stone background. */
-  --shadow-sm:
-    0 1px 2px color-mix(in srgb, var(--color-ink) 10%, transparent);
-  --shadow-md:
+  /* --- Elevation --- three intentional depths, ink-tinted rather than
+     flat black so they read as lifted surfaces on the warm stone
+     background instead of a generic drop shadow.
+
+     subtle   barely-there separation -- small controls that sit flush
+              with the page (segmented control, banner)
+     resting  the default depth for a card that's "on the page" --
+              the duty board, Needs Review cards, the upload card
+     raised   actively in front of everything else -- the modal, the
+              upload dropzone (a surface within a surface), and the
+              hover state of an interactive resting card */
+  --shadow-subtle: 0 1px 2px color-mix(in srgb, var(--color-ink) 10%, transparent);
+  --shadow-resting:
     0 10px 28px color-mix(in srgb, var(--color-ink) 16%, transparent),
     0 2px 8px color-mix(in srgb, var(--color-ink) 10%, transparent);
+  --shadow-raised:
+    0 20px 44px color-mix(in srgb, var(--color-ink) 24%, transparent),
+    0 4px 12px color-mix(in srgb, var(--color-ink) 14%, transparent);
+
+  /* --- Transitions --- one timing, used everywhere something responds
+     to hover/focus/selection (button states, row hovers, tab
+     switches), so nothing in the app snaps instantly. */
+  --transition: 180ms ease;
 }
