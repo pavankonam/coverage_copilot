@@ -26,7 +26,12 @@ const STEPS = [
 // "success" display of its own; the caller (SchedulePage) refetches and
 // shows the actual duty board in the same place, which is the real
 // confirmation.
-function RosterUpload({ onUploaded }) {
+//
+// onCancel is optional: passed only when this is shown via "Replace
+// roster" on top of an already-loaded board (there's something to
+// cancel back to). The plain empty state has nothing to return to, so
+// it omits onCancel and no Cancel button renders.
+function RosterUpload({ onUploaded, onCancel }) {
   const [state, setState] = useState({ status: 'idle' })
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef(null)
@@ -152,6 +157,17 @@ function RosterUpload({ onUploaded }) {
             <span className="dropzone-title">Drag and drop your roster CSV here</span>
             <span className="dropzone-subtitle">or click to browse files</span>
           </label>
+        )}
+
+        {onCancel && (
+          <button
+            type="button"
+            className="btn btn-ghost-on-ink upload-cancel-button"
+            onClick={onCancel}
+            disabled={state.status === 'uploading'}
+          >
+            Cancel
+          </button>
         )}
       </div>
 

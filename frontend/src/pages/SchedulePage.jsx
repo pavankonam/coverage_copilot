@@ -134,7 +134,10 @@ function SchedulePage() {
       )}
 
       {(state.status === 'no-roster' || (state.status === 'ok' && isReplacingRoster)) && (
-        <RosterUpload onUploaded={handleUploaded} />
+        <RosterUpload
+          onUploaded={handleUploaded}
+          onCancel={isReplacingRoster ? () => setIsReplacingRoster(false) : undefined}
+        />
       )}
 
       {state.status === 'ok' && !isReplacingRoster && state.original.length === 0 && (

@@ -86,6 +86,10 @@
   color: var(--color-text-on-ink-muted);
 }
 
+.upload-cancel-button {
+  margin-top: 1rem;
+}
+
 /* --- States --------------------------------------------------------- */
 
 .upload-uploading {
