@@ -113,3 +113,68 @@ kbd {
   font-size: 0.75rem;
   color: var(--color-text-muted);
 }
+
+/* --- Buttons -----------------------------------------------------------
+   Shared base + two variants, used by the absence modal, pending-review
+   Assign buttons, and the Upload page's "Go to Schedule" action.
+   Component-specific files may layer a small modifier (e.g. flex-shrink)
+   on top via an additional class. */
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.875rem;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  display: inline-block;
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  color: var(--color-ink);
+  background: var(--color-brass);
+  border-color: var(--color-brass);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-brass-hover);
+  border-color: var(--color-brass-hover);
+}
+
+/* For use on the ink-navy surfaces (modal, Upload card). */
+.btn-ghost-on-ink {
+  color: var(--color-text-on-ink-muted);
+  background: transparent;
+  border-color: color-mix(in srgb, white 18%, transparent);
+  font-weight: 500;
+}
+
+.btn-ghost-on-ink:hover:not(:disabled) {
+  color: var(--color-text-on-ink);
+  border-color: color-mix(in srgb, white 32%, transparent);
+}
+
+/* --- Error/danger box on an ink-navy surface ----------------------------
+   Shared by the absence modal and the Upload page's validation errors.
+   Callers add their own margin via a second class. */
+.error-box-on-ink {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--color-danger-on-ink);
+  background: var(--color-danger-tint);
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+}

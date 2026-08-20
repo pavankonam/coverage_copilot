@@ -97,7 +97,7 @@ function AbsenceReportModal({ staffId, staffName, day, shiftCode, onClose, onRes
           />
 
           {error && (
-            <p className="modal-error" role="alert">
+            <p className="error-box-on-ink modal-error" role="alert">
               {error}
             </p>
           )}
@@ -105,13 +105,13 @@ function AbsenceReportModal({ staffId, staffName, day, shiftCode, onClose, onRes
           <div className="modal-actions">
             <button
               type="button"
-              className="modal-button-ghost"
+              className="btn btn-ghost-on-ink"
               onClick={onClose}
               disabled={submitting}
             >
               Cancel
             </button>
-            <button type="submit" className="modal-button-primary" disabled={submitting}>
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
               {submitting ? 'Reporting…' : 'Report Absence'}
             </button>
           </div>

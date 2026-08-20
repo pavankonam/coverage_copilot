@@ -74,7 +74,7 @@ function SingleCandidate({ candidate, isAssigning, disabled, onAssign }) {
       </div>
       <button
         type="button"
-        className="assign-button"
+        className="btn btn-primary assign-button"
         disabled={disabled}
         onClick={() => onAssign(candidate.staff_id, candidate.name)}
       >
@@ -119,7 +119,7 @@ function RankedCandidates({ event, assigning, onAssign }) {
                 </div>
                 <button
                   type="button"
-                  className="assign-button"
+                  className="btn btn-primary assign-button"
                   disabled={assigning != null}
                   onClick={() => onAssign(candidate.staff_id, candidateName(event, candidate.staff_id))}
                 >

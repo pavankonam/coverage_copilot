@@ -64,14 +64,8 @@
   opacity: 0.7;
 }
 
+/* Delta on top of the shared .error-box-on-ink (index.css). */
 .modal-error {
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  color: var(--color-danger-on-ink);
-  background: var(--color-danger-tint);
-  border: 1px solid var(--color-danger-border);
-  border-radius: var(--radius-sm);
-  padding: 0.5rem 0.75rem;
   margin: 0.75rem 0 0;
 }
 
@@ -80,47 +74,4 @@
   justify-content: flex-end;
   gap: 0.625rem;
   margin-top: 1.25rem;
-}
-
-.modal-button-ghost,
-.modal-button-primary {
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 600;
-  border-radius: var(--radius-sm);
-  padding: 0.5rem 0.875rem;
-  cursor: pointer;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
-}
-
-.modal-button-ghost {
-  color: var(--color-text-on-ink-muted);
-  background: transparent;
-  border: 1px solid color-mix(in srgb, white 18%, transparent);
-  font-weight: 500;
-}
-
-.modal-button-ghost:hover:not(:disabled) {
-  color: var(--color-text-on-ink);
-  border-color: color-mix(in srgb, white 32%, transparent);
-}
-
-.modal-button-primary {
-  color: var(--color-ink);
-  background: var(--color-brass);
-  border: 1px solid var(--color-brass);
-}
-
-.modal-button-primary:hover:not(:disabled) {
-  background: var(--color-brass-hover);
-  border-color: var(--color-brass-hover);
-}
-
-.modal-button-ghost:disabled,
-.modal-button-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
