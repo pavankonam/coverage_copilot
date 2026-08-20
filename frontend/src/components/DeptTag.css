@@ -1,0 +1,12 @@
+.dept-tag {
+  --dept-color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--dept-color) 16%, var(--color-surface));
+  color: color-mix(in srgb, var(--dept-color) 78%, black);
+  border: 1px solid color-mix(in srgb, var(--dept-color) 32%, var(--color-surface));
+  white-space: nowrap;
+}

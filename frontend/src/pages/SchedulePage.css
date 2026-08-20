@@ -52,33 +52,6 @@
   margin-bottom: 0.1875rem;
 }
 
-.staff-name {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  color: var(--color-text);
-}
-
-.staff-id {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-}
-
-.dept-tag {
-  --dept-color: var(--color-text-muted);
-  font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  padding: 0.125rem 0.5rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--dept-color) 16%, var(--color-surface));
-  color: color-mix(in srgb, var(--dept-color) 78%, black);
-  border: 1px solid color-mix(in srgb, var(--dept-color) 32%, var(--color-surface));
-  white-space: nowrap;
-}
-
 .shift-cell {
   position: relative;
   padding: 0;
@@ -122,38 +95,6 @@
 .shift-code-off {
   font-weight: 400;
   color: var(--color-text-muted);
-}
-
-.escalation-banner {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  background: var(--color-brass-tint);
-  border: 1px solid color-mix(in srgb, var(--color-brass) 40%, transparent);
-  border-left: 3px solid var(--color-brass);
-  border-radius: var(--radius-md);
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  color: var(--color-text);
-  max-width: 640px;
-}
-
-.escalation-banner-dismiss {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-muted);
-  font-size: 1.125rem;
-  line-height: 1;
-  padding: 0 0.125rem;
-  flex-shrink: 0;
-}
-
-.escalation-banner-dismiss:hover {
-  color: var(--color-text);
 }
 
 /* Marks a cell where the effective schedule differs from the originally

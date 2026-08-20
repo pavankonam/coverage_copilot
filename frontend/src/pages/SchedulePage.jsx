@@ -1,23 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { API_BASE_URL } from '../api'
 import AbsenceReportModal from '../components/AbsenceReportModal'
+import DeptTag from '../components/DeptTag'
 import './SchedulePage.css'
 
 // Mirrors src/data_layer.py's DAY_COLUMNS.
 const DAY_COLUMNS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
-// Mirrors src/data_layer.py's DEFAULT_DEPARTMENTS and the four
-// department tag colors defined in styles/tokens.css.
-const DEPARTMENT_COLOR_VAR = {
-  'Front Desk': '--color-dept-front-desk',
-  Housekeeping: '--color-dept-housekeeping',
-  'F&B': '--color-dept-fb',
-  Concierge: '--color-dept-concierge',
-}
-
-function departmentColorVar(department) {
-  return DEPARTMENT_COLOR_VAR[department] ?? '--color-text-muted'
-}
 
 const ESCALATION_BANNER_TIMEOUT_MS = 7000
 
@@ -90,13 +78,13 @@ function SchedulePage() {
       </p>
 
       {escalationNotice && (
-        <div className="escalation-banner" role="status">
+        <div className="banner" role="status">
           <span>
             Escalated for review — {escalationNotice.note} It's now pending in Pending review.
           </span>
           <button
             type="button"
-            className="escalation-banner-dismiss"
+            className="banner-dismiss"
             aria-label="Dismiss"
             onClick={() => setEscalationNotice(null)}
           >
@@ -169,12 +157,7 @@ function DutyBoard({ original, effective, onReportAbsence }) {
                 <th scope="row" className="staff-col">
                   <div className="staff-name-row">
                     <span className="staff-name">{row.name}</span>
-                    <span
-                      className="dept-tag"
-                      style={{ '--dept-color': `var(${departmentColorVar(row.department)})` }}
-                    >
-                      {row.department}
-                    </span>
+                    <DeptTag department={row.department} />
                   </div>
                   <span className="staff-id">{row.staff_id}</span>
                 </th>

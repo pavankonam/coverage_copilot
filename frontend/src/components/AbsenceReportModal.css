@@ -67,9 +67,9 @@
 .modal-error {
   font-family: var(--font-sans);
   font-size: 0.8125rem;
-  color: #f0a99a;
-  background: color-mix(in srgb, #e08b7d 18%, transparent);
-  border: 1px solid color-mix(in srgb, #e08b7d 40%, transparent);
+  color: var(--color-danger-on-ink);
+  background: var(--color-danger-tint);
+  border: 1px solid var(--color-danger-border);
   border-radius: var(--radius-sm);
   padding: 0.5rem 0.75rem;
   margin: 0.75rem 0 0;

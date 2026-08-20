@@ -30,6 +30,16 @@
   --color-brass-hover: color-mix(in srgb, var(--color-brass) 88%, black);
   --color-brass-tint: color-mix(in srgb, var(--color-brass) 14%, var(--color-surface));
 
+  /* Errors/warnings (rust-red, distinct from the F&B department's muted
+     rust -- this one is deliberately more saturated so it reads as an
+     alert rather than a tag). Two variants: -on-light for text on the
+     stone/surface backgrounds, -on-ink for use inside the ink-navy
+     modal/sidebar. */
+  --color-danger-on-light: #a3392b;
+  --color-danger-on-ink: #f0a99a;
+  --color-danger-tint: color-mix(in srgb, #e08b7d 16%, transparent);
+  --color-danger-border: color-mix(in srgb, #e08b7d 38%, transparent);
+
   /* --- Department tag colors (muted) --- */
   --color-dept-front-desk: #5c7893; /* slate blue */
   --color-dept-housekeeping: #7e8f6e; /* sage green */

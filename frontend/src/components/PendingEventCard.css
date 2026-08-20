@@ -1,0 +1,263 @@
+/* --- Card shell ------------------------------------------------------ */
+
+.pending-card {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-ink);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+}
+
+.pending-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pending-card-who {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.pending-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  white-space: nowrap;
+}
+
+.pending-card-day {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.pending-card-reason {
+  font-family: var(--font-sans);
+  font-style: italic;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin: 0.75rem 0 0;
+}
+
+.pending-card-note {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-text);
+  margin: 0.5rem 0 0;
+}
+
+.pending-card-error {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--color-danger-on-light);
+  background: var(--color-danger-tint);
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  margin: 0.75rem 0 0;
+}
+
+/* --- Deterministic candidate facts (mode: single) --------------------
+   Calm and procedural on purpose -- plain structured facts read
+   straight off the classification result, no generated language. */
+
+.candidate-row {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.candidate-info-who {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.candidate-name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.candidate-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.fact-badge {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: color-mix(in srgb, var(--color-ink) 6%, var(--color-surface));
+  border-radius: 999px;
+  padding: 0.1875rem 0.625rem;
+}
+
+.fact-badge-mono {
+  font-family: var(--font-mono);
+}
+
+.fact-badge-warning {
+  color: var(--color-danger-on-light);
+  background: var(--color-danger-tint);
+}
+
+/* --- Assign button (shared: single + multi) --------------------------- */
+
+.assign-button {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: var(--color-brass);
+  border: 1px solid var(--color-brass);
+  border-radius: var(--radius-sm);
+  padding: 0.4375rem 0.875rem;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.assign-button:hover:not(:disabled) {
+  background: var(--color-brass-hover);
+  border-color: var(--color-brass-hover);
+}
+
+.assign-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* --- AI-ranked section (mode: multi) -----------------------------------
+   Deliberately distinct from the rest of the card -- a considered,
+   editorial treatment (serif italic reasoning, a labeled band, brass
+   score) rather than a chatbot-style bubble. This is the one screen
+   where the AI's presence should be evident at a glance. */
+
+.ai-section {
+  margin-top: 1rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-brass) 11%, var(--color-surface)) 0%,
+    var(--color-surface) 130%
+  );
+  border: 1px solid color-mix(in srgb, var(--color-brass) 32%, var(--color-border));
+  padding: 1rem 1.125rem;
+}
+
+.ai-section-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--color-brass) 80%, black);
+  margin-bottom: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
+}
+
+.ai-loading-text {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.ranked-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.ranked-item {
+  padding-top: 0.875rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-brass) 22%, transparent);
+}
+
+.ranked-item:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.ranked-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ranked-score {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-brass-hover);
+  min-width: 2.25rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.ranked-item-who {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.ranked-reasoning {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  margin: 0.625rem 0 0;
+  line-height: 1.5;
+}
+
+.ranked-warning {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--color-danger-on-light);
+  background: var(--color-danger-tint);
+  border-radius: var(--radius-sm);
+  padding: 0.375rem 0.625rem;
+  margin: 0.5rem 0 0;
+}
+
+/* --- mode: none --------------------------------------------------------- */
+
+.none-explanation {
+  margin-top: 1rem;
+  padding: 0.875rem 1rem;
+  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-surface));
+  border-radius: var(--radius-md);
+}
+
+.none-explanation p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.none-explanation-manual {
+  margin-top: 0.375rem !important;
+  color: var(--color-text-muted) !important;
+  font-style: italic;
+}
