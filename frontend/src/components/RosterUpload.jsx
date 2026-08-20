@@ -1,8 +1,7 @@
 import { CalendarCheck, CheckCircle2, UploadCloud } from 'lucide-react'
 import { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { API_BASE_URL } from '../api'
-import './UploadPage.css'
+import './RosterUpload.css'
 
 const STEPS = [
   {
@@ -18,11 +17,16 @@ const STEPS = [
   {
     icon: CalendarCheck,
     title: 'See it on Schedule',
-    description: 'Your staff and their weekly shifts appear on the duty board.',
+    description: 'Your staff and their weekly shifts appear on the duty board -- right here.',
   },
 ]
 
-function UploadPage() {
+// Embedded in SchedulePage's empty state (no roster loaded yet). On a
+// successful upload, calls onUploaded(body) and steps back -- it has no
+// "success" display of its own; the caller (SchedulePage) refetches and
+// shows the actual duty board in the same place, which is the real
+// confirmation.
+function RosterUpload({ onUploaded }) {
   const [state, setState] = useState({ status: 'idle' })
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef(null)
@@ -56,22 +60,8 @@ function UploadPage() {
         return
       }
 
-      // The upload response itself doesn't include a department
-      // breakdown, only staff_count -- fetch /schedule for that. Not
-      // critical: the upload already succeeded either way, so a failure
-      // here just means a shorter summary, not an error state.
-      let departments = []
-      try {
-        const scheduleResponse = await fetch(`${API_BASE_URL}/schedule`)
-        if (scheduleResponse.ok) {
-          const scheduleData = await scheduleResponse.json()
-          departments = [...new Set(scheduleData.original.map((row) => row.department))].sort()
-        }
-      } catch {
-        // Non-critical, see above.
-      }
-
-      setState({ status: 'success', staffCount: body.staff_count, departments })
+      setState({ status: 'idle' })
+      onUploaded(body)
     } catch (err) {
       setState({
         status: 'error',
@@ -104,16 +94,10 @@ function UploadPage() {
     event.target.value = '' // allow re-selecting the same file later
   }
 
-  function reset() {
-    setState({ status: 'idle' })
-  }
-
   const showDropzone = state.status === 'idle' || state.status === 'invalid' || state.status === 'error'
 
   return (
     <div>
-      <h1 className="page-heading">Upload</h1>
-
       <div className="upload-card">
         <h2 className="upload-card-heading">Upload your roster</h2>
         <p className="upload-card-subheading">
@@ -148,31 +132,6 @@ function UploadPage() {
 
         {state.status === 'uploading' && (
           <p className="upload-uploading">Uploading {state.fileName}…</p>
-        )}
-
-        {state.status === 'success' && (
-          <div className="upload-success">
-            <p className="upload-success-headline">Roster loaded successfully.</p>
-            <p className="upload-success-summary">
-              {state.staffCount} staff loaded
-              {state.departments.length > 0 && (
-                <>
-                  {' '}
-                  across {state.departments.length} department
-                  {state.departments.length === 1 ? '' : 's'}: {state.departments.join(', ')}
-                </>
-              )}
-              .
-            </p>
-            <div className="upload-success-actions">
-              <Link to="/schedule" className="btn btn-primary">
-                Go to Schedule
-              </Link>
-              <button type="button" className="btn btn-ghost-on-ink" onClick={reset}>
-                Upload a different file
-              </button>
-            </div>
-          </div>
         )}
 
         {showDropzone && (
@@ -211,4 +170,4 @@ function UploadPage() {
   )
 }
 
-export default UploadPage
+export default RosterUpload

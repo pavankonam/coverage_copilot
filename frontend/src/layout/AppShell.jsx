@@ -1,14 +1,14 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import './AppShell.css'
 
-// PRD Section 7 screens A-E, in that order. Routed as real pages
-// (react-router), not scrolled sections.
+// Two routed pages. Schedule absorbs the old Upload flow (shown inline
+// when no roster is loaded yet); Coverage absorbs the old Pending and
+// Ledger pages behind a segmented control -- see CoveragePage.jsx. This
+// is a deliberate departure from PRD Section 7's five separate screens
+// (A-E), not an oversight.
 const NAV_ITEMS = [
-  { to: '/upload', label: 'Upload' },
   { to: '/schedule', label: 'Schedule' },
   { to: '/coverage', label: 'Coverage' },
-  { to: '/pending', label: 'Pending' },
-  { to: '/ledger', label: 'Ledger' },
 ]
 
 function AppShell() {

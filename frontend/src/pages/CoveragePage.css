@@ -1,4 +1,5 @@
-.pending-list {
+.pending-list,
+.resolved-list {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;

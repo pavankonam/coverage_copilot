@@ -138,28 +138,6 @@
   margin: 0 0 1.25rem;
 }
 
-.upload-success-headline {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--color-text-on-ink);
-  margin: 0 0 0.375rem;
-}
-
-.upload-success-summary {
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  color: var(--color-text-on-ink-muted);
-  margin: 0 0 1.5rem;
-  line-height: 1.5;
-}
-
-.upload-success-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
 /* --- "What happens next" ------------------------------------------------
    Gives the page real content beyond one dark box: three plain steps on
    the page's own stone background, not another ink-navy panel, so the

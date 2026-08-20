@@ -2,30 +2,34 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { API_BASE_URL } from '../api'
 import AbsenceReportModal from '../components/AbsenceReportModal'
 import DeptTag from '../components/DeptTag'
+import RosterUpload from '../components/RosterUpload'
 import './SchedulePage.css'
 
 // Mirrors src/data_layer.py's DAY_COLUMNS.
 const DAY_COLUMNS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-const ESCALATION_BANNER_TIMEOUT_MS = 7000
+const NOTICE_TIMEOUT_MS = 7000
 
 function SchedulePage() {
   const [state, setState] = useState({ status: 'loading' })
   const [reportTarget, setReportTarget] = useState(null) // {staffId, staffName, day, shiftCode} | null
-  const [escalationNotice, setEscalationNotice] = useState(null) // {note, mode} | null
-  const dismissTimerRef = useRef(null)
+  const [notice, setNotice] = useState(null) // string | null
+  const noticeTimerRef = useRef(null)
 
   const loadSchedule = useCallback(() => {
     // No "reset to loading" here: the initial mount already starts in
     // 'loading' state, and a post-submit refetch should update the grid
-    // in place rather than flashing back to a loading spinner.
+    // in place rather than flashing back to a loading spinner. Returns
+    // the parsed data (or null) so callers can act on it, e.g. deriving
+    // an upload summary without a second fetch.
     return fetch(`${API_BASE_URL}/schedule`)
       .then(async (response) => {
         if (response.status === 400) {
           // No roster has been POSTed to the backend yet -- expected,
-          // not an error.
+          // not an error. The empty state below handles this by
+          // embedding the upload flow directly, not routing away.
           setState({ status: 'no-roster' })
-          return
+          return null
         }
         if (!response.ok) {
           throw new Error(`Unexpected response: ${response.status}`)
@@ -33,9 +37,11 @@ function SchedulePage() {
 
         const data = await response.json()
         setState({ status: 'ok', original: data.original, effective: data.effective })
+        return data
       })
       .catch((error) => {
         setState({ status: 'error', message: error.message })
+        return null
       })
   }, [])
 
@@ -44,11 +50,17 @@ function SchedulePage() {
   }, [loadSchedule])
 
   useEffect(() => {
-    return () => clearTimeout(dismissTimerRef.current)
+    return () => clearTimeout(noticeTimerRef.current)
   }, [])
 
+  function showNotice(message) {
+    clearTimeout(noticeTimerRef.current)
+    setNotice(message)
+    noticeTimerRef.current = setTimeout(() => setNotice(null), NOTICE_TIMEOUT_MS)
+  }
+
   function handleReportAbsence(target) {
-    setEscalationNotice(null)
+    setNotice(null)
     setReportTarget(target)
   }
 
@@ -61,12 +73,19 @@ function SchedulePage() {
     // == "escalate" doesn't touch the grid, so without this the
     // manager would see nothing happen at all.
     if (data?.decision === 'escalate') {
-      clearTimeout(dismissTimerRef.current)
-      setEscalationNotice({ note: data.note, mode: data.mode })
-      dismissTimerRef.current = setTimeout(
-        () => setEscalationNotice(null),
-        ESCALATION_BANNER_TIMEOUT_MS,
-      )
+      showNotice(`Escalated for review — ${data.note} See Coverage to assign.`)
+    }
+  }
+
+  async function handleUploaded(body) {
+    const data = await loadSchedule() // 'no-roster' -> 'ok', duty board appears in place
+    if (data) {
+      const departments = [...new Set(data.original.map((row) => row.department))].sort()
+      const departmentSummary =
+        departments.length > 0
+          ? ` across ${departments.length} department${departments.length === 1 ? '' : 's'}: ${departments.join(', ')}`
+          : ''
+      showNotice(`Roster loaded — ${body.staff_count} staff${departmentSummary}.`)
     }
   }
 
@@ -74,16 +93,14 @@ function SchedulePage() {
     <div>
       <h1 className="page-heading">Schedule</h1>
 
-      {escalationNotice && (
+      {notice && (
         <div className="banner" role="status">
-          <span>
-            Escalated for review — {escalationNotice.note} It's now pending in Pending review.
-          </span>
+          <span>{notice}</span>
           <button
             type="button"
             className="banner-dismiss"
             aria-label="Dismiss"
-            onClick={() => setEscalationNotice(null)}
+            onClick={() => setNotice(null)}
           >
             ×
           </button>
@@ -92,9 +109,7 @@ function SchedulePage() {
 
       {state.status === 'loading' && <p>Loading schedule…</p>}
 
-      {state.status === 'no-roster' && (
-        <p className="notice">No roster loaded yet.</p>
-      )}
+      {state.status === 'no-roster' && <RosterUpload onUploaded={handleUploaded} />}
 
       {state.status === 'error' && (
         <p className="notice notice-error">

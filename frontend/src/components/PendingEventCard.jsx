@@ -1,10 +1,6 @@
+import { candidateName } from '../eventHelpers'
 import DeptTag from './DeptTag'
 import './PendingEventCard.css'
-
-function candidateName(event, staffId) {
-  const match = event.eligible_candidates.find((c) => c.staff_id === staffId)
-  return match ? match.name : staffId
-}
 
 function PendingEventCard({ event, assigning, error, onAssign }) {
   const isCardAssigning = assigning?.eventId === event.id
