@@ -1,7 +1,26 @@
+import { CalendarCheck, CheckCircle2, UploadCloud } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { API_BASE_URL } from '../api'
 import './UploadPage.css'
+
+const STEPS = [
+  {
+    icon: UploadCloud,
+    title: 'Upload',
+    description: 'Drop your roster CSV here, or browse to select it.',
+  },
+  {
+    icon: CheckCircle2,
+    title: 'Validate',
+    description: 'Every row is checked against the required columns and shift codes.',
+  },
+  {
+    icon: CalendarCheck,
+    title: 'See it on Schedule',
+    description: 'Your staff and their weekly shifts appear on the duty board.',
+  },
+]
 
 function UploadPage() {
   const [state, setState] = useState({ status: 'idle' })
@@ -170,11 +189,24 @@ function UploadPage() {
               className="sr-only"
               onChange={handleInputChange}
             />
+            <UploadCloud className="dropzone-icon" size={30} strokeWidth={1.5} aria-hidden="true" />
             <span className="dropzone-title">Drag and drop your roster CSV here</span>
             <span className="dropzone-subtitle">or click to browse files</span>
           </label>
         )}
       </div>
+
+      <ol className="upload-steps">
+        {STEPS.map(({ icon: Icon, title, description }) => (
+          <li key={title} className="upload-step">
+            <div className="upload-step-icon">
+              <Icon size={18} strokeWidth={1.75} aria-hidden="true" />
+            </div>
+            <p className="upload-step-title">{title}</p>
+            <p className="upload-step-description">{description}</p>
+          </li>
+        ))}
+      </ol>
     </div>
   )
 }

@@ -73,9 +73,6 @@ function SchedulePage() {
   return (
     <div>
       <h1 className="page-heading">Schedule</h1>
-      <p className="api-base">
-        API: <code>{API_BASE_URL}</code>
-      </p>
 
       {escalationNotice && (
         <div className="banner" role="status">
