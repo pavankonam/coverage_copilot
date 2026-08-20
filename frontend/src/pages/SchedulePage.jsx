@@ -1,3 +1,4 @@
+import { RefreshCw } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { API_BASE_URL } from '../api'
 import AbsenceReportModal from '../components/AbsenceReportModal'
@@ -14,6 +15,11 @@ function SchedulePage() {
   const [state, setState] = useState({ status: 'loading' })
   const [reportTarget, setReportTarget] = useState(null) // {staffId, staffName, day, shiftCode} | null
   const [notice, setNotice] = useState(null) // string | null
+  // User-triggered replacement of an already-loaded roster, as opposed
+  // to the 'no-roster' status that embeds the same upload flow
+  // automatically. Both end up rendering the identical <RosterUpload>
+  // below -- this only decides whether that happens.
+  const [isReplacingRoster, setIsReplacingRoster] = useState(false)
   const noticeTimerRef = useRef(null)
 
   const loadSchedule = useCallback(() => {
@@ -78,7 +84,8 @@ function SchedulePage() {
   }
 
   async function handleUploaded(body) {
-    const data = await loadSchedule() // 'no-roster' -> 'ok', duty board appears in place
+    setIsReplacingRoster(false)
+    const data = await loadSchedule() // 'no-roster' (or replacing) -> 'ok', board appears in place
     if (data) {
       const departments = [...new Set(data.original.map((row) => row.department))].sort()
       const departmentSummary =
@@ -109,19 +116,32 @@ function SchedulePage() {
 
       {state.status === 'loading' && <p>Loading schedule…</p>}
 
-      {state.status === 'no-roster' && <RosterUpload onUploaded={handleUploaded} />}
-
       {state.status === 'error' && (
         <p className="notice notice-error">
           Couldn't reach the API: {state.message}
         </p>
       )}
 
-      {state.status === 'ok' && state.original.length === 0 && (
+      {state.status === 'ok' && !isReplacingRoster && (
+        <button
+          type="button"
+          className="btn btn-ghost replace-roster-button"
+          onClick={() => setIsReplacingRoster(true)}
+        >
+          <RefreshCw size={14} strokeWidth={2} aria-hidden="true" />
+          Replace roster
+        </button>
+      )}
+
+      {(state.status === 'no-roster' || (state.status === 'ok' && isReplacingRoster)) && (
+        <RosterUpload onUploaded={handleUploaded} />
+      )}
+
+      {state.status === 'ok' && !isReplacingRoster && state.original.length === 0 && (
         <p className="notice">The loaded roster has no staff.</p>
       )}
 
-      {state.status === 'ok' && state.original.length > 0 && (
+      {state.status === 'ok' && !isReplacingRoster && state.original.length > 0 && (
         <DutyBoard
           original={state.original}
           effective={state.effective}

@@ -1,3 +1,10 @@
+.replace-roster-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  margin-bottom: 1.25rem;
+}
+
 .duty-board-wrap {
   overflow-x: auto;
   border: 1px solid color-mix(in srgb, var(--color-ink) 16%, var(--color-stone));
@@ -104,12 +111,22 @@
 
 /* Marks a cell where the effective schedule differs from the originally
    uploaded one (PRD Section 12) -- deliberately subtle: a small brass
-   dot in the corner, not a badge, so a scanning-speed table stays calm
-   when nothing changed and still clearly flags what did. */
+   dot, not a badge, so a scanning-speed table stays calm when nothing
+   changed and still clearly flags what did.
+
+   Centered horizontally (not corner-positioned) and deliberately NOT
+   offset from .shift-cell's own right edge: .shift-cell has zero
+   padding (padding lives on the inner button/static span instead), so
+   a small `right: Xrem` offset sat only a few px from the column
+   border -- much closer to the boundary than the shift-code text
+   itself (which has 1rem of padding), making the dot look like it
+   belonged to the neighboring day at a glance. Centering removes that
+   ambiguity regardless of column width. */
 .changed-dot {
   position: absolute;
-  top: 0.4rem;
-  right: 0.4rem;
+  top: 0.35rem;
+  left: 50%;
+  transform: translateX(-50%);
   width: 6px;
   height: 6px;
   border-radius: 50%;

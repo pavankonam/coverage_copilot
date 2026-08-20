@@ -161,6 +161,20 @@ kbd {
   border-color: color-mix(in srgb, white 32%, transparent);
 }
 
+/* For use on the light stone/surface backgrounds (e.g. Schedule's
+   "Replace roster" action). */
+.btn-ghost {
+  color: var(--color-text);
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  font-weight: 500;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--color-ink) 28%, var(--color-border));
+  background: color-mix(in srgb, var(--color-ink) 4%, var(--color-surface));
+}
+
 /* --- Error/danger box on an ink-navy surface ----------------------------
    Shared by the absence modal and the Upload page's validation errors.
    Callers add their own margin via a second class. */
