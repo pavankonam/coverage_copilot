@@ -1,38 +1,60 @@
-:root {
-  color-scheme: light dark;
-  font: 16px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
+@import './styles/tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
 }
 
 body {
   margin: 0;
-  padding: 2rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-stone);
 }
 
-.page {
-  max-width: 640px;
-  margin: 0 auto;
+code,
+kbd {
+  font-family: var(--font-mono);
+}
+
+/* Shared page-content styles (until each page gets its own real design) */
+
+.page-heading {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin: 0 0 1.5rem;
 }
 
 .api-base {
-  color: #767676;
+  color: var(--color-text-muted);
   font-size: 0.85rem;
 }
 
 .notice {
   padding: 0.75rem 1rem;
-  border-radius: 6px;
-  background: color-mix(in srgb, currentColor 8%, transparent);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
 }
 
 .notice-error {
-  color: #c0392b;
+  color: #a3392b;
 }
 
 .schedule {
-  background: color-mix(in srgb, currentColor 6%, transparent);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   padding: 1rem;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   overflow-x: auto;
   text-align: left;
+  font-family: var(--font-mono);
   font-size: 0.85rem;
 }

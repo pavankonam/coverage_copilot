@@ -1,0 +1,61 @@
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: var(--color-ink);
+  padding: 2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.sidebar-wordmark {
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--color-text-on-ink);
+  letter-spacing: 0.01em;
+  padding: 0 0.5rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.sidebar-link {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-on-ink-muted);
+  text-decoration: none;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid transparent;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.sidebar-link:hover {
+  color: var(--color-text-on-ink);
+  background: color-mix(in srgb, white 6%, transparent);
+}
+
+.sidebar-link-active,
+.sidebar-link-active:hover {
+  color: var(--color-text-on-ink);
+  border-left-color: var(--color-brass);
+  background: color-mix(in srgb, var(--color-brass) 16%, transparent);
+}
+
+.content {
+  background: var(--color-stone);
+  padding: 2.5rem 3rem;
+  overflow-y: auto;
+}

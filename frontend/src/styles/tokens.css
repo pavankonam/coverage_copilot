@@ -1,0 +1,48 @@
+/* Coverage Copilot design tokens.
+ *
+ * Palette: ink navy (primary text / sidebar), stone (page background),
+ * brass (accent), plus four muted department tag colors. Everything
+ * else (surfaces, borders, muted text, hover states) is derived from
+ * these three via color-mix() rather than hand-picked, so the palette
+ * stays internally consistent as it grows.
+ *
+ * Type: Fraunces (serif) for headers/wordmark, Inter (sans) for
+ * data-dense content, IBM Plex Mono for IDs/hours/timestamps -- loaded
+ * from Google Fonts in index.html.
+ */
+
+:root {
+  /* --- Core palette --- */
+  --color-ink: #1b2430;
+  --color-stone: #edebe6;
+  --color-brass: #c08a3e;
+
+  /* --- Derived surfaces & text --- */
+  --color-surface: #faf9f6;
+  --color-border: color-mix(in srgb, var(--color-ink) 12%, var(--color-stone));
+
+  --color-text: var(--color-ink);
+  --color-text-muted: color-mix(in srgb, var(--color-ink) 55%, var(--color-stone));
+
+  --color-text-on-ink: var(--color-stone);
+  --color-text-on-ink-muted: color-mix(in srgb, var(--color-stone) 62%, var(--color-ink));
+
+  --color-brass-hover: color-mix(in srgb, var(--color-brass) 88%, black);
+  --color-brass-tint: color-mix(in srgb, var(--color-brass) 14%, var(--color-surface));
+
+  /* --- Department tag colors (muted) --- */
+  --color-dept-front-desk: #5c7893; /* slate blue */
+  --color-dept-housekeeping: #7e8f6e; /* sage green */
+  --color-dept-fb: #ae6748; /* muted rust */
+  --color-dept-concierge: #83617a; /* plum */
+
+  /* --- Type --- */
+  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  /* --- Layout --- */
+  --sidebar-width: 250px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+}
