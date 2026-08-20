@@ -1,0 +1,113 @@
+.duty-board-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.duty-board {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 640px;
+}
+
+.duty-board thead th {
+  position: sticky;
+  top: 0;
+  background: var(--color-surface);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.duty-board tbody tr:not(:last-child) th,
+.duty-board tbody tr:not(:last-child) td {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.duty-board tbody tr:hover th,
+.duty-board tbody tr:hover td {
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+}
+
+.duty-board tbody th.staff-col {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+  padding: 0.75rem 1rem;
+  min-width: 220px;
+}
+
+.staff-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.1875rem;
+}
+
+.staff-name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.staff-id {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.dept-tag {
+  --dept-color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--dept-color) 16%, var(--color-surface));
+  color: color-mix(in srgb, var(--dept-color) 78%, black);
+  border: 1px solid color-mix(in srgb, var(--dept-color) 32%, var(--color-surface));
+  white-space: nowrap;
+}
+
+.shift-cell {
+  position: relative;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  min-width: 64px;
+}
+
+.shift-code {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.shift-code-off {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+/* Marks a cell where the effective schedule differs from the originally
+   uploaded one (PRD Section 12) -- deliberately subtle: a small brass
+   dot in the corner, not a badge, so a scanning-speed table stays calm
+   when nothing changed and still clearly flags what did. */
+.changed-dot {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-brass);
+}
