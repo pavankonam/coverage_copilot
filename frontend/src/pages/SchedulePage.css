@@ -81,9 +81,35 @@
 
 .shift-cell {
   position: relative;
-  padding: 0.75rem 1rem;
+  padding: 0;
   text-align: center;
   min-width: 64px;
+}
+
+/* Shared sizing for both the clickable (button) and static (OFF) cell
+   content, so working-shift and OFF cells line up identically. */
+.shift-cell-button,
+.shift-cell-static {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+}
+
+.shift-cell-button {
+  border: none;
+  background: transparent;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+}
+
+.shift-cell-button:hover {
+  background: color-mix(in srgb, var(--color-brass) 14%, transparent);
 }
 
 .shift-code {
@@ -96,6 +122,38 @@
 .shift-code-off {
   font-weight: 400;
   color: var(--color-text-muted);
+}
+
+.escalation-banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--color-brass-tint);
+  border: 1px solid color-mix(in srgb, var(--color-brass) 40%, transparent);
+  border-left: 3px solid var(--color-brass);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-text);
+  max-width: 640px;
+}
+
+.escalation-banner-dismiss {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+  line-height: 1;
+  padding: 0 0.125rem;
+  flex-shrink: 0;
+}
+
+.escalation-banner-dismiss:hover {
+  color: var(--color-text);
 }
 
 /* Marks a cell where the effective schedule differs from the originally

@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { API_BASE_URL } from '../api'
+import AbsenceReportModal from '../components/AbsenceReportModal'
 import './SchedulePage.css'
-
-// Single source of truth for the API base URL -- see .env.example.
-// Vite only exposes env vars prefixed VITE_ to client code.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 // Mirrors src/data_layer.py's DAY_COLUMNS.
 const DAY_COLUMNS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -21,16 +19,20 @@ function departmentColorVar(department) {
   return DEPARTMENT_COLOR_VAR[department] ?? '--color-text-muted'
 }
 
+const ESCALATION_BANNER_TIMEOUT_MS = 7000
+
 function SchedulePage() {
   const [state, setState] = useState({ status: 'loading' })
+  const [reportTarget, setReportTarget] = useState(null) // {staffId, staffName, day, shiftCode} | null
+  const [escalationNotice, setEscalationNotice] = useState(null) // {note, mode} | null
+  const dismissTimerRef = useRef(null)
 
-  useEffect(() => {
-    let cancelled = false
-
-    fetch(`${API_BASE_URL}/schedule`)
+  const loadSchedule = useCallback(() => {
+    // No "reset to loading" here: the initial mount already starts in
+    // 'loading' state, and a post-submit refetch should update the grid
+    // in place rather than flashing back to a loading spinner.
+    return fetch(`${API_BASE_URL}/schedule`)
       .then(async (response) => {
-        if (cancelled) return
-
         if (response.status === 400) {
           // No roster has been POSTed to the backend yet -- expected,
           // not an error.
@@ -45,15 +47,40 @@ function SchedulePage() {
         setState({ status: 'ok', original: data.original, effective: data.effective })
       })
       .catch((error) => {
-        if (!cancelled) {
-          setState({ status: 'error', message: error.message })
-        }
+        setState({ status: 'error', message: error.message })
       })
-
-    return () => {
-      cancelled = true
-    }
   }, [])
+
+  useEffect(() => {
+    loadSchedule()
+  }, [loadSchedule])
+
+  useEffect(() => {
+    return () => clearTimeout(dismissTimerRef.current)
+  }, [])
+
+  function handleReportAbsence(target) {
+    setEscalationNotice(null)
+    setReportTarget(target)
+  }
+
+  function handleResolved(data) {
+    setReportTarget(null)
+    loadSchedule() // reflect any auto-resolved change immediately
+
+    // decision == "auto" is already visible as a grid change (the
+    // brass changed-cell dot) -- nothing else needed there. decision
+    // == "escalate" doesn't touch the grid, so without this the
+    // manager would see nothing happen at all.
+    if (data?.decision === 'escalate') {
+      clearTimeout(dismissTimerRef.current)
+      setEscalationNotice({ note: data.note, mode: data.mode })
+      dismissTimerRef.current = setTimeout(
+        () => setEscalationNotice(null),
+        ESCALATION_BANNER_TIMEOUT_MS,
+      )
+    }
+  }
 
   return (
     <div>
@@ -61,6 +88,22 @@ function SchedulePage() {
       <p className="api-base">
         API: <code>{API_BASE_URL}</code>
       </p>
+
+      {escalationNotice && (
+        <div className="escalation-banner" role="status">
+          <span>
+            Escalated for review — {escalationNotice.note} It's now pending in Pending review.
+          </span>
+          <button
+            type="button"
+            className="escalation-banner-dismiss"
+            aria-label="Dismiss"
+            onClick={() => setEscalationNotice(null)}
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       {state.status === 'loading' && <p>Loading schedule…</p>}
 
@@ -79,13 +122,28 @@ function SchedulePage() {
       )}
 
       {state.status === 'ok' && state.original.length > 0 && (
-        <DutyBoard original={state.original} effective={state.effective} />
+        <DutyBoard
+          original={state.original}
+          effective={state.effective}
+          onReportAbsence={handleReportAbsence}
+        />
+      )}
+
+      {reportTarget && (
+        <AbsenceReportModal
+          staffId={reportTarget.staffId}
+          staffName={reportTarget.staffName}
+          day={reportTarget.day}
+          shiftCode={reportTarget.shiftCode}
+          onClose={() => setReportTarget(null)}
+          onResolved={handleResolved}
+        />
       )}
     </div>
   )
 }
 
-function DutyBoard({ original, effective }) {
+function DutyBoard({ original, effective, onReportAbsence }) {
   const effectiveById = new Map(effective.map((row) => [row.staff_id, row]))
 
   return (
@@ -124,19 +182,35 @@ function DutyBoard({ original, effective }) {
                   const originalCode = row[day]
                   const effectiveCode = effectiveRow ? effectiveRow[day] : originalCode
                   const changed = effectiveCode !== originalCode
+                  const isWorkingShift = effectiveCode !== 'OFF'
+
                   return (
                     <td
                       key={day}
                       className="shift-cell"
                       title={changed ? `Originally ${originalCode}` : undefined}
                     >
-                      <span
-                        className={
-                          'shift-code' + (effectiveCode === 'OFF' ? ' shift-code-off' : '')
-                        }
-                      >
-                        {effectiveCode}
-                      </span>
+                      {isWorkingShift ? (
+                        <button
+                          type="button"
+                          className="shift-cell-button"
+                          aria-label={`Report absence for ${row.name}, ${day} (${effectiveCode})`}
+                          onClick={() =>
+                            onReportAbsence({
+                              staffId: row.staff_id,
+                              staffName: row.name,
+                              day,
+                              shiftCode: effectiveCode,
+                            })
+                          }
+                        >
+                          <span className="shift-code">{effectiveCode}</span>
+                        </button>
+                      ) : (
+                        <span className="shift-cell-static">
+                          <span className="shift-code shift-code-off">OFF</span>
+                        </span>
+                      )}
                       {changed && (
                         <>
                           <span className="changed-dot" aria-hidden="true" />
